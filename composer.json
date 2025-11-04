@@ -13,9 +13,9 @@
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
-        "Tiamat Profile": {
+        "Sandpoint Profile": {
             "type": "git",
-            "url": "https://github.com/CuBoulder/tiamat10-profile.git"
+            "url": "git@github.com:CuBoulder/sandpoint-d11-profile.git"
         },
         "Tiamat Custom Entities": {
             "type": "git",
@@ -254,13 +254,13 @@
         "cu-boulder/ucb_site_configuration": "dev-main",
         "cu-boulder/ucb_styled_block": "dev-main",
         "cu-boulder/ucb_third_party_libraries": "dev-main",
-        "cu-boulder/ucb_user_invite": "dev-main",
         "cu-boulder/ucb_trust_schema": "dev-main",
         "cu-boulder/ucb_trusted_content_discovery": "dev-main",
+        "cu-boulder/ucb_user_invite": "dev-main",
         "cweagans/composer-patches": "^1.7",
         "drupal/admin_toolbar": "^3.4",
         "drupal/administerusersbyrole": "^3.4",
-        "drupal/aggregator": "^2.0",
+        "drupal/aggregator": "^2.2",
         "drupal/anchor_link": "^3.0@alpha",
         "drupal/antibot": "^2.0",
         "drupal/better_social_sharing_buttons": "^4.0",
@@ -274,7 +274,7 @@
         "drupal/entity_usage": "^2.0@beta",
         "drupal/externalauth": "^2.0",
         "drupal/features": "^3.16",
-        "drupal/field_group": "^3.1",
+        "drupal/field_group": "^4.0",
         "drupal/focal_point": "^2.0",
         "drupal/google_cse": "^5.0",
         "drupal/google_tag": "^2.0",
@@ -303,7 +303,6 @@
         "drupal/responsive_preview": "^2.1",
         "drupal/scheduler": "^2.0",
         "drupal/simple_sitemap": "^4.1",
-        "drupal/simplesamlphp_auth": "^4.0",
         "drupal/smtp": "^1.0",
         "drupal/trash": "^3.0",
         "drupal/twig_tweak": "^3.1",
@@ -322,7 +321,6 @@
         "progress-tracker/progress-tracker": "*",
         "signature_pad/signature_pad": "*",
         "simplehtmldom/simplehtmldom": "^2.0@RC",
-        "simplesamlphp/simplesamlphp": "^2.2",
         "tabby/tabby": "*",
         "tippyjs/tippyjs": "*"
     },
@@ -349,17 +347,12 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "cweagans/composer-patches": true,
             "php-http/discovery": true,
-            "simplesamlphp/composer-module-installer": true,
-            "simplesamlphp/composer-xmlprovider-installer": true,
             "tbachert/spi": true
         },
         "sort-packages": true
     },
     "extra": {
-        "patches": {
-            "drupal/core": {
-                "Reusable Patch Beta": "https://www.drupal.org/files/issues/2024-01-23/add_reusable_option_to_inline_block_creation-2999491-141.patch"
-            }
+        "patches": { 
         },
         "patchLevel": {
             "drupal/core": "-p2"
