@@ -353,9 +353,12 @@
     },
     "extra": {
         "patches": { 
+            "drupal/core": {
+                "Add reusable option to inline block creation": "patches/add_reusable_option_to_inline_block_creation-drupal11.patch"
+            }
         },
         "patchLevel": {
-            "drupal/core": "-p2"
+            "drupal/core": "-p1"
         },
         "drupal-scaffold": {
             "locations": {
