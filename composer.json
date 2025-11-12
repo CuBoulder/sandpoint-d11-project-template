@@ -15,7 +15,7 @@
         },
         "Sandpoint Profile": {
             "type": "git",
-            "url": "git@github.com:CuBoulder/sandpoint-d11-profile.git"
+            "url": "https://github.com/CuBoulder/sandpoint-d11-profile"
         },
         "Tiamat Custom Entities": {
             "type": "git",
