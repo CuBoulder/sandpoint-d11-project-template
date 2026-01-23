@@ -15,7 +15,7 @@
         },
         "Sandpoint Profile": {
             "type": "git",
-            "url": "https://github.com/CuBoulder/sandpoint-d11-profile"
+	    	"url": "https://github.com/CuBoulder/tiamat10-profile.git"
         },
         "Tiamat Custom Entities": {
             "type": "git",
@@ -234,7 +234,7 @@
         "codemirror/codemirror": "*",
         "composer/installers": "^2.1",
         "cu-boulder/boulder_base": "dev-main",
-        "cu-boulder/boulder_d11_profile": "dev-main",
+        "cu-boulder/boulder_profile": "dev-main",
         "cu-boulder/ckeditor5_bootstrap_accordion": "dev-main",
         "cu-boulder/ckeditor5_icons": "dev-main",
         "cu-boulder/express_admin": "dev-main",
