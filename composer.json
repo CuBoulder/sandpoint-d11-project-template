@@ -355,7 +355,7 @@
         "patches": { 
             "drupal/core": {
                 "Add reusable option to inline block creation": "patches/add_reusable_option_to_inline_block_creation-drupal11.patch",
-                "Fix OpenDialogCommand dialog class merge (3474018)": "patches/3474018-11.2.5.patch.txt",
+                "Fix OpenDialogCommand dialog class merge (3474018)": "patches/3474018-43-11.x.patch.txt",
                 "Fix type error null text in Html::escape (3523317)": "patches/fix-type-error-null-text-3523317-18.patch.txt"
             }
         },
