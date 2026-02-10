@@ -1,0 +1,106 @@
+diff --git a/core/lib/Drupal/Core/Ajax/OpenDialogCommand.php b/core/lib/Drupal/Core/Ajax/OpenDialogCommand.php
+index 45fe3c67c70f2acdff20b47736b14d34d1f81e27..d6933e4520415cfe5ee6e475d7e180e6079aeafe 100644
+--- a/core/lib/Drupal/Core/Ajax/OpenDialogCommand.php
++++ b/core/lib/Drupal/Core/Ajax/OpenDialogCommand.php
+@@ -74,13 +74,20 @@
+  class OpenDialogCommand implements CommandInterface, CommandWithAttachedAssetsIn
+   */
+   public function __construct($selector, string|\Stringable|null $title, $content, array $dialog_options = [], $settings = NULL) {
+     $title = PlainTextOutput::renderFromHtml($title);
+-
+     $dialog_options += ['title' => $title];
++
++    $classes = [];
++    if (isset($dialog_options['classes']['ui-dialog'])) {
++      $classes[] = $dialog_options['classes']['ui-dialog'];
++    }
+     if (isset($dialog_options['dialogClass'])) {
+       @trigger_error('Passing $dialog_options[\'dialogClass\'] to OpenDialogCommand::__construct() is deprecated in drupal:10.3.0 and will be removed in drupal:12.0.0. Use $dialog_options[\'classes\'] instead. See https://www.drupal.org/node/3440844', E_USER_DEPRECATED);
+-      $dialog_options['classes']['ui-dialog'] = $dialog_options['dialogClass'];
++      $classes[] = $dialog_options['dialogClass'];
+       unset($dialog_options['dialogClass']);
+     }
++    if ($classes) {
++      $dialog_options['classes']['ui-dialog'] = implode(' ', $classes);
++    }
+ 
+     $this->selector = $selector;
+     $this->content = $content;
+diff --git a/core/lib/Drupal/Core/Ajax/OpenOffCanvasDialogCommand.php b/core/lib/Drupal/Core/Ajax/OpenOffCanvasDialogCommand.php
+index a7aefb00664bb1fe9c90be13d7dc6d253cfd07f7..18d1cd6674f0e6d323bc81d6077e1a02fcb9f44d 100644
+--- a/core/lib/Drupal/Core/Ajax/OpenOffCanvasDialogCommand.php
++++ b/core/lib/Drupal/Core/Ajax/OpenOffCanvasDialogCommand.php
+@@ -38,21 +38,19 @@
+  class OpenOffCanvasDialogCommand extends OpenDialogCommand {
+   *   (optional) The position to render the off-canvas dialog.
+    */
+   public function __construct(string|\Stringable|null $title, $content, array $dialog_options = [], $settings = NULL, $position = 'side') {
+-    $dialog_class = FALSE;
++    $classes = [];
+     if (isset($dialog_options['classes']['ui-dialog'])) {
+-      $dialog_class = $dialog_options['classes']['ui-dialog'];
++      $classes[] = $dialog_options['classes']['ui-dialog'];
+     }
+-    elseif (isset($dialog_options['dialogClass'])) {
++    if (isset($dialog_options['dialogClass'])) {
+       @trigger_error('Passing $dialog_options[\'dialogClass\'] to OpenOffCanvasDialogCommand::__construct() is deprecated in drupal:10.3.0 and will be removed in drupal:12.0.0. Use $dialog_options[\'classes\'] instead. See https://www.drupal.org/node/3440844', E_USER_DEPRECATED);
+-      $dialog_class = $dialog_options['dialogClass'];
++      $classes[] = $dialog_options['dialogClass'];
+       unset($dialog_options['dialogClass']);
+     }
+-    if ($dialog_class) {
+-      $dialog_options['classes']['ui-dialog'] = $dialog_class . ' ' . "ui-dialog-off-canvas ui-dialog-position-$position";
+-    }
+-    else {
+-      $dialog_options['classes']['ui-dialog'] = "ui-dialog-off-canvas ui-dialog-position-$position";
+-    }
++    $classes[] = 'ui-dialog-off-canvas';
++    $classes[] = "ui-dialog-position-$position";
++    $dialog_options['classes']['ui-dialog'] = implode(' ', $classes);
++
+     parent::__construct('#drupal-off-canvas', $title, $content, $dialog_options, $settings);
+     $this->dialogOptions['modal'] = FALSE;
+     $this->dialogOptions['autoResize'] = FALSE;
+diff --git a/core/modules/ckeditor5/js/ckeditor5.js b/core/modules/ckeditor5/js/ckeditor5.js
+index de97e49a77d82f3b7487a8da5bcf72c456bcb88b..96d3ba79aead6d22796b02dee289731b90735825 100644
+--- a/core/modules/ckeditor5/js/ckeditor5.js
++++ b/core/modules/ckeditor5/js/ckeditor5.js
+@@ -598,11 +598,12 @@
+     */
+    openDialog(url, saveCallback, dialogSettings) {
+       // Add a consistent dialog class.
+-      const classes = dialogSettings.dialogClass
+-        ? dialogSettings.dialogClass.split(' ')
++      dialogSettings.classes = dialogSettings.classes || {};
++      const classes = dialogSettings.classes['ui-dialog']
++        ? dialogSettings.classes['ui-dialog'].split(' ')
+         : [];
+       classes.push('ui-dialog--narrow');
+-      dialogSettings.dialogClass = classes.join(' ');
++      dialogSettings.classes['ui-dialog'] = classes.join(' ');
+       dialogSettings.autoResize =
+         window.matchMedia('(min-width: 600px)').matches;
+       dialogSettings.width = 'auto';
+diff --git a/core/modules/ckeditor5/src/Plugin/CKEditor5Plugin/MediaLibrary.php b/core/modules/ckeditor5/src/Plugin/CKEditor5Plugin/MediaLibrary.php
+index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
+--- a/core/modules/ckeditor5/src/Plugin/CKEditor5Plugin/MediaLibrary.php
++++ b/core/modules/ckeditor5/src/Plugin/CKEditor5Plugin/MediaLibrary.php
+@@ -12,6 +12,7 @@
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\editor\EditorInterface;
+ use Drupal\media_library\MediaLibraryState;
++use Drupal\media_library\MediaLibraryUiBuilder;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+@@ -68,7 +69,10 @@
+   public function getDynamicPluginConfig(array $static_plugin_config, EditorInterface $editor): array {
+     $media_type_ids = $this->mediaTypeStorage->getQuery()->execute();
+ 
+     // Making the title for editor drupal media embed translatable.
+     $static_plugin_config['drupalMedia']['dialogSettings']['title'] = $this->t('Add or select media');
++    // Pass dialog classes so the media library modal receives proper styling
++    // (e.g. media-library-widget-modal) when opened from CKEditor.
++    $static_plugin_config['drupalMedia']['dialogSettings']['classes'] = MediaLibraryUiBuilder::dialogOptions()['classes'];
+ 
+     if ($editor->hasAssociatedFilterFormat()) {
