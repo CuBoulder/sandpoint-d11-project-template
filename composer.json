@@ -15,7 +15,7 @@
         },
         "Sandpoint Profile": {
             "type": "git",
-	    	"url": "https://github.com/CuBoulder/tiamat10-profile.git"
+            "url": "https://github.com/CuBoulder/tiamat10-profile.git"
         },
         "Tiamat Custom Entities": {
             "type": "git",
@@ -224,8 +224,8 @@
                 "version": "0.5.0",
                 "type": "drupal-library",
                 "dist": {
-                "url": "https://registry.npmjs.org/@northernco/ckeditor5-anchor-drupal/-/ckeditor5-anchor-drupal-0.5.0.tgz",
-                "type": "tar"
+                    "url": "https://registry.npmjs.org/@northernco/ckeditor5-anchor-drupal/-/ckeditor5-anchor-drupal-0.5.0.tgz",
+                    "type": "tar"
                 }
             }
         }
@@ -352,8 +352,9 @@
         "sort-packages": true
     },
     "extra": {
-        "patches": { 
+        "patches": {
             "drupal/core": {
+                "Add reusable option to inline block creation": "patches/add_reusable_option_to_inline_block_creation-drupal11.3.3.patch"
             }
         },
         "patchLevel": {
