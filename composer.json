@@ -266,9 +266,9 @@
         "drupal/better_social_sharing_buttons": "^4.0",
         "drupal/ckeditor5_paste_filter": "^1.0",
         "drupal/consumer_image_styles": "^4.0",
-        "drupal/core-composer-scaffold": "~11.2.0",
-        "drupal/core-project-message": "~11.2.0",
-        "drupal/core-recommended": "~11.2.0",
+        "drupal/core-composer-scaffold": "~11.3.0",
+        "drupal/core-project-message": "~11.3.0",
+        "drupal/core-recommended": "~11.3.0",
         "drupal/diff": "^2.0@beta",
         "drupal/entity_embed": "^1.1",
         "drupal/entity_usage": "^2.0@beta",
@@ -354,7 +354,6 @@
     "extra": {
         "patches": { 
             "drupal/core": {
-                "Add reusable option to inline block creation": "patches/add_reusable_option_to_inline_block_creation-drupal11.patch"
             }
         },
         "patchLevel": {
