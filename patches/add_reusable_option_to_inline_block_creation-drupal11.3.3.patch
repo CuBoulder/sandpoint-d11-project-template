@@ -383,7 +383,8 @@ diff --git a/modules/layout_builder/src/Form/ConfigureBlockFormBase.php b/module
      $section = $this->sectionStorage->getSection($this->delta);
      $section->getComponent($this->uuid)->setConfiguration($configuration);
 diff --git a/modules/layout_builder/src/Form/MakeReusableBlockForm.php b/modules/layout_builder/src/Form/MakeReusableBlockForm.php
---- a/modules/layout_builder/src/Form/MakeReusableBlockForm.php
+new file mode 100644
+--- /dev/null
 +++ b/modules/layout_builder/src/Form/MakeReusableBlockForm.php
 @@ -0,0 +1,148 @@
 +<?php
