@@ -274,6 +274,8 @@
         "drupal/entity_usage": "^2.0@beta",
         "drupal/externalauth": "^2.0",
         "drupal/features": "^3.16",
+        "drupal/feeds": "^3.2",
+        "drupal/feeds_ex": "^1.0@beta",
         "drupal/field_group": "^4.0",
         "drupal/focal_point": "^2.0",
         "drupal/google_cse": "^5.0",
