@@ -304,6 +304,7 @@
         "drupal/scheduler": "^2.0",
         "drupal/simple_sitemap": "^4.1",
         "drupal/smtp": "^1.0",
+        "drupal/stable9": "^1.0",
         "drupal/trash": "^3.0",
         "drupal/twig_tweak": "^3.1",
         "drupal/unpublished_404": "^2.0",
@@ -341,12 +342,13 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
-            "phpstan/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cweagans/composer-patches": true,
             "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "symfony/runtime": true,
             "tbachert/spi": true
         },
         "sort-packages": true
