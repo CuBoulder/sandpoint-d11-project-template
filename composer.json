@@ -278,6 +278,7 @@
         "drupal/focal_point": "^2.0",
         "drupal/google_cse": "^5.0",
         "drupal/google_tag": "^2.0",
+        "drupal/gtranslate": "^3.0",
         "drupal/jsonapi_extras": "^3.26",
         "drupal/klaro": "^3.0",
         "drupal/layout_builder_iframe_modal": "^1.3",
@@ -357,6 +358,9 @@
         "patches": {
             "drupal/core": {
                 "Add reusable option to inline block creation": "patches/add_reusable_option_to_inline_block_creation-drupal11.3.3.patch"
+            },
+            "drupal/gtranslate": {
+                "3590106: Fix undefined variable when saving settings": "patches/gtranslate-3590106-languages_weights_typo.patch"
             }
         },
         "patchLevel": {
