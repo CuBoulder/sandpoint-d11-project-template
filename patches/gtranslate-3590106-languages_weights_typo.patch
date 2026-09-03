@@ -1,0 +1,13 @@
+diff --git a/src/Form/GTranslateSettingsForm.php b/src/Form/GTranslateSettingsForm.php
+--- a/src/Form/GTranslateSettingsForm.php
++++ b/src/Form/GTranslateSettingsForm.php
+@@ -475,7 +475,7 @@ class GTranslateSettingsForm extends ConfigFormBase {
+ 
+     // todo: separate flag languages option with sorting
+     $this->config('gtranslate.settings')->set('flag_languages', $languages);
+-    $this->config('gtranslate.settings')->set('flag_languages_weight', $languages_weights);
++    $this->config('gtranslate.settings')->set('flag_languages_weight', $language_weights);
+ 
+     $this->config('gtranslate.settings')->save();
+ 
+     parent::submitForm($form, $form_state);
