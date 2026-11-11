@@ -10,7 +10,7 @@ echo yes | vendor/bin/drush si boulder_profile \
   install_configure_form.enable_update_status_module=NULL \
   install_configure_form.enable_update_status_emails=NULL
 
-# vendor/bin/drush pmu simplesamlphp_auth -y
+vendor/bin/drush pmu klaro -y
 
 echo -e "\nLogin with Username: admin\nPassword: sandpoint.test"
 echo -e "Site URL: ${DDEV_PRIMARY_URL}\n"
