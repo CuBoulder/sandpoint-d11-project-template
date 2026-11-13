@@ -14,4 +14,8 @@ composer_version: "2"
 web_environment: [ ]
 corepack_enable: false
 
+hooks:
+  post-pull:
+    - exec: bash /var/www/html/.ddev/scripts/after-pull.sh
+
 # See https://ddev.readthedocs.io/en/stable/users/configuration/config for more
