@@ -25,6 +25,10 @@
             "type": "git",
             "url": "https://github.com/CuBoulder/tiamat-theme.git"
         },
+        "Dev Tools": {
+            "type": "git",
+            "url": "https://github.com/CuBoulder/ucb_dev_tools.git"
+        },
         "codemirror": {
             "type": "package",
             "package": {
@@ -258,6 +262,7 @@
         "cu-boulder/ucb_ckeditor_plugins": "dev-main",
         "cu-boulder/ucb_custom_entities": "dev-main",
         "cu-boulder/ucb_default_content": "dev-main",
+        "cu-boulder/ucb_dev_tools": "dev-main",
         "cu-boulder/ucb_drush_commands": "dev-main",
         "cu-boulder/ucb_focal_image_enable": "dev-main",
         "cu-boulder/ucb_linkmod": "dev-main",

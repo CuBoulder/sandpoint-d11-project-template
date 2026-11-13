@@ -15,11 +15,23 @@ else
   drush -y user:create admin --mail='admin@example.com' --password='sandpoint.test'
 fi
 
-# localize links, no domain masking, no SAML
+# uninstall klaro
+drush pmu klaro
+
+# turn on dev tools and link localization
+drush en ucb_dev_tools ucb_dev_localized_links
+
+# no domain masking, no SAML
 drush -y config:set pantheon_domain_masking.settings enabled no
-drush -y php:eval "\Drupal::configFactory()->getEditable('samlauth.authentication')->set('login_auto_redirect', FALSE)->save();"
-# TODO: check script? - fix links
-drush php:script /var/www/html/.ddev/scripts/localize-links.php
+drush -y config:set samlauth.authentication login_auto_redirect 0
+
+# disables antibot from running on forms (can affect login)
+drush -y config:set antibot.settings excluded_form_ids "['*']" --input-format=yaml
+
+# disable JS/CSS aggregation, turn on twig debug settings
+drush -y theme:dev on
+
 drush cache:rebuild
 
-echo "Local login: admin / sandpoint.test"
+echo "\nLogin with Username: admin\nPassword: sandpoint.test"
+echo "Site URL: ${DDEV_PRIMARY_URL}\n"

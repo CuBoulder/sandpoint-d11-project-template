@@ -32,6 +32,14 @@ If new versions of drupal core/contrib modules need to be installed, you should 
 
 # Pull a Pantheon Container
 
+Sync your local install with the db and files of a designated Pantheon site.
+
+## Prerequisites
+
+In addition to Composer and DDEV, you will need:
+- Terminus installed locally. See [Pantheon's documentation](https://docs.pantheon.io/terminus/install) for installation steps.
+- [Personal Access Token](https://docs.pantheon.io/personal-access-tokens) (aka machine token) on your Pantheon account.
+
 ## 1. Token
 Have your token set @ `/Users/<user>/.ddev/global_config.yaml`
   
@@ -43,49 +51,57 @@ web_environment:
 These expire and will need to be regenerated occasionally.
 
 ----
-# 2. Configuring DDEV / Pantheon Link
-Clone the `sandpoint_template` and run `ddev start` as usual. Once that's finished, then we will edit some config:
 
-- Create a copy of `.dev/providers/pantheon.yaml.example` as `pantheon.yaml`
-- Under `.ddev/providers/pantheon.yaml`, add the following lines
+## 2. Configuring DDEV / Pantheon Link
+
+Clone this repo, run the usual `ddev start && ddev composer install && ddev install-site` chain, then set up your config or supply your target site's info in the pull command directly.
+
+You can configure which site and environment to sync to through:
+- CLI argument with the pull command (sufficient for one-off syncs)
+- and/or by setting a few values in `.ddev/config.yaml` (best if you plan to periodically re-sync to the same site).
+
+See [DDEV's Pantheon docs](https://docs.ddev.com/en/stable/users/providers/pantheon/#pantheon-quickstart) for more info.
+
+You'll generally want to sync to `live`.
+
+### In DDEV Config
+
+In `.ddev/config.yaml`:
 ```yml
-environment_variables:
-  project: <machine_name><.dev/.live>
+web_environment:
+  # machine name of site you want to sync to, e.g. ucbprod-strategicrelations
+  - DDEV_PANTHEON_SITE=<site-machine-name>
+
+  # which Pantheon environment to sync to (e.g. dev, test, live, or a multidev)
+  # for multidevs, use the multidev's name as found in its platform domain
+  - DDEV_PANTHEON_ENVIRONMENT=live
+
+  # [Optional] (but recommended)
+  # when 'true', it will use the most recent backup for the site env being pulled (requires a backup to exist)
+  # when 'false' or omitted, the `ddev pull pantheon` command will create a new backup
+  - DDEV_USE_PANTHEON_BACKUP=true
 ```
 
-**Note:  Spaces are important for the indent, it rejects tabs as invalid yaml**
+### As Command Args
 
-This will be the machine name of the container you get from Pantheon like so:
+The `ddev pull pantheon` command accepts an `--environment` flag which can be used in place of **or to override** the values set in `.ddev/config.yaml`.
 
-```yml
-environment_variables:
-  project: ucbprod-strategicrelations.live
+**Examples:**
+```bash
+ddev pull pantheon --environment=DDEV_USE_PANTHEON_BACKUP=true -y
+ddev pull pantheon --environment="DDEV_PANTHEON_SITE=ucbprod-aerospace,DDEV_PANTHEON_ENVIRONMENT=test" -y
 ```
-
-To pull a container, it must have a backup. 
-- You can use .live, .test, or .dev here, currently not using .test or .dev, but .live usually has a backup
+  
 ---
 
- Next under `web/sites/default/settings.ddev.php`, add this
-
-```yml
-// Stuff for Pantheon pulls
-// Turns off Domain Masking
-$config['pantheon_domain_masking.settings']['enabled'] = 'no';
-
-// Turns off samlauth
-$config['samlauth.authentication']['login_auto_redirect'] = FALSE;
-
-// Disables antibot from running on forms (can affect login)
-$config['antibot.settings']['excluded_form_ids'] = ['*'];
-```
-
-# Pull Database on container
+## 3. Pull Database on container
 
 
 ```bash
 ddev pull pantheon -y
 ```
+
+This automatically runs [`after-pull.sh`](.ddev/scripts/after-pull.sh) at the end to adjust modules and config for local dev.
 
 There is no longer a need to run `ddev install-site`, your site will be ready to go!
 
