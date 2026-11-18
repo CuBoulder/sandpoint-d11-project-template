@@ -39,6 +39,7 @@ Sync your local install with the db and files of a designated Pantheon site.
 In addition to Composer and DDEV, you will need:
 - Terminus installed locally. See [Pantheon's documentation](https://docs.pantheon.io/terminus/install) for installation steps.
 - [Personal Access Token](https://docs.pantheon.io/personal-access-tokens) (aka machine token) on your Pantheon account.
+- DDEV >= `v1.24.8` (check yours with `ddev --version`). For `v1.24.7` or lower, see [Legacy Pantheon Provider Integration](#legacy-pantheon-provider-integration)
 
 ## 1. Token
 Have your token set @ `/Users/<user>/.ddev/global_config.yaml`
@@ -54,7 +55,13 @@ These expire and will need to be regenerated occasionally.
 
 ## 2. Configuring DDEV / Pantheon Link
 
-Clone this repo, run the usual `ddev start && ddev composer install && ddev install-site` chain, then set up your config or supply your target site's info in the pull command directly.
+Steps to sync from scratch:
+1. Clone this repo locally.
+2. (Optional) Change the default values in `.ddev/config.yaml` to the site and/or env you wish to sync to. 
+   - Default is `ucbprod-demos-documentation.live`.
+   - Requires DDEV >= `v1.24.8`.
+3. Run the usual `ddev start && ddev composer install` commands. **Note:** you don't need to run the `install-site` script.
+4. Pull the site down with `ddev pull pantheon -y`.
 
 You can configure which site and environment to sync to through:
 - CLI argument with the pull command (sufficient for one-off syncs)
@@ -64,13 +71,31 @@ See [DDEV's Pantheon docs](https://docs.ddev.com/en/stable/users/providers/panth
 
 You'll generally want to sync to `live`.
 
+<details>
+<summary>Configuring for DDEV v1.24.7 and earlier</summary>
+
+### Legacy Pantheon Provider Integration
+
+1. Create a copy of or rename `.ddev/providers/pantheon.yaml.example` as `.ddev/providers/pantheon.yaml`
+2. Inside the new `pantheon.yaml` file, add the following lines
+```yml
+environment_variables:
+  # or change it to a different machine name and/or environment as desired
+  project: ucbprod-demos-documentation.live
+```
+
+</details>
+
 ### In DDEV Config
 
-In `.ddev/config.yaml`:
+For DDEV `v1.24.8` and later, in `.ddev/config.yaml`:
 ```yml
+# Note: Spaces are important for the indent; tabs are rejected as invalid yaml
+
 web_environment:
   # machine name of site you want to sync to, e.g. ucbprod-strategicrelations
-  - DDEV_PANTHEON_SITE=<site-machine-name>
+  # default is for the /demos/documentation site
+  - DDEV_PANTHEON_SITE=ucbprod-demos-documentation
 
   # which Pantheon environment to sync to (e.g. dev, test, live, or a multidev)
   # for multidevs, use the multidev's name as found in its platform domain
@@ -81,6 +106,8 @@ web_environment:
   # when 'false' or omitted, the `ddev pull pantheon` command will create a new backup
   - DDEV_USE_PANTHEON_BACKUP=true
 ```
+
+> [!Note] Any changes to this config after the container is already started requires running `ddev restart` for those to take effect.
 
 ### As Command Args
 
