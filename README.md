@@ -71,21 +71,6 @@ See [DDEV's Pantheon docs](https://docs.ddev.com/en/stable/users/providers/panth
 
 You'll generally want to sync to `live`.
 
-<details>
-<summary>Configuring for DDEV v1.24.7 and earlier</summary>
-
-### Legacy Pantheon Provider Integration
-
-1. Create a copy of or rename `.ddev/providers/pantheon.yaml.example` as `.ddev/providers/pantheon.yaml`
-2. Inside the new `pantheon.yaml` file, add the following lines
-```yml
-environment_variables:
-  # or change it to a different machine name and/or environment as desired
-  project: ucbprod-demos-documentation.live
-```
-
-</details>
-
 ### In DDEV Config
 
 For DDEV `v1.24.8` and later, in `.ddev/config.yaml`:
@@ -108,6 +93,21 @@ web_environment:
 ```
 
 > [!Note] Any changes to this config after the container is already started requires running `ddev restart` for those to take effect.
+
+#### Legacy Pantheon Provider Integration
+
+<details>
+<summary>For DDEV v1.24.7 and earlier</summary>
+
+1. Create a copy of or rename `.ddev/providers/pantheon.yaml.example` as `.ddev/providers/pantheon.yaml`
+2. Inside the new `pantheon.yaml` file, add the following lines
+```yml
+environment_variables:
+  # or change it to a different machine name and/or environment as desired
+  project: ucbprod-demos-documentation.live
+```
+
+</details>
 
 ### As Command Args
 

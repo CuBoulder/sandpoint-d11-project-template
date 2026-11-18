@@ -20,7 +20,6 @@ fi
 if [[ ! -d /var/www/html/web/modules/contrib/samlauth ]]; then
   composer require drupal/samlauth
 fi
-# drush pmu samlauth
 
 # uninstall klaro
 drush pmu klaro samlauth
@@ -28,7 +27,7 @@ drush pmu klaro samlauth
 # turn on dev tools and link localization
 drush en ucb_dev_tools ucb_dev_localized_links
 
-# no domain masking, no SAML
+# no domain masking
 drush -y config:set pantheon_domain_masking.settings enabled no
 
 # disables antibot from running on forms (can affect login)
