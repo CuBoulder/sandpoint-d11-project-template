@@ -15,15 +15,21 @@ else
   drush -y user:create admin --mail='admin@example.com' --password='sandpoint.test'
 fi
 
+# samlauth needs to be installed by composer even to toggle it off via config
+# needs to be turned off or uninstalled to not block config import/export
+if [[ ! -d /var/www/html/web/modules/contrib/samlauth ]]; then
+  composer require drupal/samlauth
+fi
+# drush pmu samlauth
+
 # uninstall klaro
-drush pmu klaro
+drush pmu klaro samlauth
 
 # turn on dev tools and link localization
 drush en ucb_dev_tools ucb_dev_localized_links
 
 # no domain masking, no SAML
 drush -y config:set pantheon_domain_masking.settings enabled no
-drush -y config:set samlauth.authentication login_auto_redirect 0
 
 # disables antibot from running on forms (can affect login)
 drush -y config:set antibot.settings excluded_form_ids "['*']" --input-format=yaml
@@ -33,5 +39,5 @@ drush -y theme:dev on
 
 drush cache:rebuild
 
-echo "\nLogin with Username: admin\nPassword: sandpoint.test"
-echo "Site URL: ${DDEV_PRIMARY_URL}\n"
+echo "Login with Username: admin\nPassword: sandpoint.test"
+echo "Site URL: ${DDEV_PRIMARY_URL}"

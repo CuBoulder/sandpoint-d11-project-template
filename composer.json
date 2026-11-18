@@ -286,6 +286,7 @@
         "drupal/core-composer-scaffold": "~11.4.0",
         "drupal/core-project-message": "~11.4.0",
         "drupal/core-recommended": "~11.4.0",
+        "drupal/devel": "^5.5",
         "drupal/diff": "^2.0@beta",
         "drupal/dropzonejs": "^2.11",
         "drupal/entity_embed": "^1.1",
