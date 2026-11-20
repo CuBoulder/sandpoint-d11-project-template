@@ -21,8 +21,10 @@ if [[ ! -d /var/www/html/web/modules/contrib/samlauth ]]; then
   composer require drupal/samlauth
 fi
 
-# uninstall klaro
-drush pmu klaro samlauth
+# uninstall prod-only modules
+# leaving the klaro uninstall here as a reminder in case it gets re-enabled on prod
+# drush pmu klaro
+drush pmu samlauth
 
 # turn on dev tools and link localization
 drush en ucb_dev_tools ucb_dev_localized_links
