@@ -11,7 +11,15 @@ database:
     version: "10.11"
 use_dns_when_possible: true
 composer_version: "2"
-web_environment: [ ]
+web_environment:
+  - DDEV_PANTHEON_SITE=ucbprod-demos-documentation
+  - DDEV_PANTHEON_ENVIRONMENT=live
+  - DDEV_USE_PANTHEON_BACKUP=true
+
 corepack_enable: false
+
+hooks:
+  post-pull:
+    - exec: bash /var/www/html/.ddev/scripts/after-pull.sh
 
 # See https://ddev.readthedocs.io/en/stable/users/configuration/config for more

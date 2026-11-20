@@ -28,3 +28,107 @@ ddev delete -Oy         # destroys the container, without backing up the databas
 ### Updating this repository
 If new versions of drupal core/contrib modules need to be installed, you should run composer update or composer require as needed and check in the new version of composer.json.  If you need to update the version of composer itself, that is found in the .lando.yml file configuration.
 
+---
+
+# Pull a Pantheon Container
+
+Sync your local install with the db and files of a designated Pantheon site.
+
+## Prerequisites
+
+In addition to Composer and DDEV, you will need:
+- Terminus installed locally. See [Pantheon's documentation](https://docs.pantheon.io/terminus/install) for installation steps.
+- [Personal Access Token](https://docs.pantheon.io/personal-access-tokens) (aka machine token) on your Pantheon account.
+- DDEV >= `v1.24.8` (check yours with `ddev --version`). For `v1.24.7` or lower, see [Legacy Pantheon Provider Integration](#legacy-pantheon-provider-integration)
+
+## 1. Token
+Have your token set @ `/Users/<user>/.ddev/global_config.yaml`
+  
+```yaml
+web_environment:
+  - TERMINUS_MACHINE_TOKEN=<your_generated_token>
+```
+
+These expire and will need to be regenerated occasionally.
+
+----
+
+## 2. Configuring DDEV / Pantheon Link
+
+Steps to sync from scratch:
+1. Clone this repo locally.
+2. (Optional) Change the default values in `.ddev/config.yaml` to the site and/or env you wish to sync to. 
+   - Default is `ucbprod-demos-documentation.live`.
+   - Requires DDEV >= `v1.24.8`.
+3. Run the usual `ddev start && ddev composer install` commands. **Note:** you don't need to run the `install-site` script.
+4. Pull the site down with `ddev pull pantheon -y`.
+
+You can configure which site and environment to sync to through:
+- CLI argument with the pull command (sufficient for one-off syncs)
+- and/or by setting a few values in `.ddev/config.yaml` (best if you plan to periodically re-sync to the same site).
+
+See [DDEV's Pantheon docs](https://docs.ddev.com/en/stable/users/providers/pantheon/#pantheon-quickstart) for more info.
+
+You'll generally want to sync to `live`.
+
+### In DDEV Config
+
+For DDEV `v1.24.8` and later, in `.ddev/config.yaml`:
+```yml
+# Note: Spaces are important for the indent; tabs are rejected as invalid yaml
+
+web_environment:
+  # machine name of site you want to sync to, e.g. ucbprod-strategicrelations
+  # default is for the /demos/documentation site
+  - DDEV_PANTHEON_SITE=ucbprod-demos-documentation
+
+  # which Pantheon environment to sync to (e.g. dev, test, live, or a multidev)
+  # for multidevs, use the multidev's name as found in its platform domain
+  - DDEV_PANTHEON_ENVIRONMENT=live
+
+  # [Optional] (but recommended)
+  # when 'true', it will use the most recent backup for the site env being pulled (requires a backup to exist)
+  # when 'false' or omitted, the `ddev pull pantheon` command will create a new backup
+  - DDEV_USE_PANTHEON_BACKUP=true
+```
+
+> [!Note] Any changes to this config after the container is already started requires running `ddev restart` for those to take effect.
+
+#### Legacy Pantheon Provider Integration
+
+<details>
+<summary>For DDEV v1.24.7 and earlier</summary>
+
+1. Create a copy of or rename `.ddev/providers/pantheon.yaml.example` as `.ddev/providers/pantheon.yaml`
+2. Inside the new `pantheon.yaml` file, add the following lines
+```yml
+environment_variables:
+  # or change it to a different machine name and/or environment as desired
+  project: ucbprod-demos-documentation.live
+```
+
+</details>
+
+### As Command Args
+
+The `ddev pull pantheon` command accepts an `--environment` flag which can be used in place of **or to override** the values set in `.ddev/config.yaml`.
+
+**Examples:**
+```bash
+ddev pull pantheon --environment=DDEV_USE_PANTHEON_BACKUP=true -y
+ddev pull pantheon --environment="DDEV_PANTHEON_SITE=ucbprod-aerospace,DDEV_PANTHEON_ENVIRONMENT=test" -y
+```
+  
+---
+
+## 3. Pull Database on container
+
+
+```bash
+ddev pull pantheon -y
+```
+
+This automatically runs [`after-pull.sh`](.ddev/scripts/after-pull.sh) at the end to adjust modules and config for local dev.
+
+There is no longer a need to run `ddev install-site`, your site will be ready to go!
+
